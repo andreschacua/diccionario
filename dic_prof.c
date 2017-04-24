@@ -124,6 +124,7 @@ tipoNodo* insertar_palabra(tipoNodo*lista, int pos, tipoDict pal_adicionar){
 	return lista;
 }
 ---------------------------------------------------------------------------------------*/
+
 tipoNodo *modificar_pal(tipoNodo *lista, char*palabra){
 	int posiciontipoNodo *pal_mod = lista;
 	int cont = 1;
@@ -132,6 +133,8 @@ tipoNodo *modificar_pal(tipoNodo *lista, char*palabra){
 
 	 }
 }
+
+/*---------------------------------------------------------------------------------------*/
 
 void guardar_lista_a_archivo(tipoNodo *lista, char *nombre_archivo){
 	FILE *archivo_bin = fopen(arc_binario, "wb");
@@ -145,7 +148,10 @@ void guardar_lista_a_archivo(tipoNodo *lista, char *nombre_archivo){
 		fwrite(tmpInfo,sizeof(tipoDict),1,archivo_bin);
 		sprintf(cadena, "<%s>:<%s>\n", tmpInfo -> palIngles, tmpInfo -> palEspanol);
 		fputs(cadena,archivo_txt);
+		palabra = palabra -> siguiente;
 	}
+	fclose(archivo_txt);
+	fclose(archivo_bin);
 }
 /*---------------------------------------------------------------------------------------*/
 int main (int argc, char * argv[]){

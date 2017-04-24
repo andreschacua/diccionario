@@ -64,35 +64,8 @@ tipoNodo* cargarDictToLista (char *nombreArchivoBin, tipoNodo *lista) {
 	fclose (manejadorBin);
 	return lista;
 }
-/*---------------------------------------------------------------------------------------
 
-tipoNodo* insertar_palabra(tipoNodo*lista, int pos, tipoDict pal_adicionar){
-	tipoNodo *aptNodo = lista;
-	tipoNodo *nodoTmp = crearNodo(palabra);
-	int cont;
-
-	if (pos == 1){
-		nodoTmp -> siguiente = lista;
-		lista = nodoTmp;
-	}
-
-	else{
-		cont = 1;
-		
-		while(cont < pos -1){
-			cont++;
-			aptNodo = aptNodo -> siguiente;
-		}
-
-		nodoTmp -> siguiente = aptNodo -> siguiente;
-		aptNodo -> siguiente = nodoTmp;
-	}
-
-	return lista;
-}
----------------------------------------------------------------------------------------*/
-
-int busqueda_palabra(char *pal_buscar, tipoNodo *lista){
+char busqueda_palabra(char *pal_buscar, tipoNodo *lista){
 	tipoNodo *palabra;
 	char pal_ing[100];
 	char pal_esp[100];
@@ -123,10 +96,60 @@ int busqueda_palabra(char *pal_buscar, tipoNodo *lista){
 		printf("La palabra no existe en el diccionario.\n");
 	}
 }
+
+/*---------------------------------------------------------------------------------------
+
+tipoNodo* insertar_palabra(tipoNodo*lista, int pos, tipoDict pal_adicionar){
+	tipoNodo *aptNodo = lista;
+	tipoNodo *nodoTmp = crearNodo(palabra);
+	int cont;
+
+	if (pos == 1){
+		nodoTmp -> siguiente = lista;
+		lista = nodoTmp;
+	}
+
+	else{
+		cont = 1;
+		
+		while(cont < pos -1){
+			cont++;
+			aptNodo = aptNodo -> siguiente;
+		}
+
+		nodoTmp -> siguiente = aptNodo -> siguiente;
+		aptNodo -> siguiente = nodoTmp;
+	}
+
+	return lista;
+}
+---------------------------------------------------------------------------------------*/
+tipoNodo *modificar_pal(tipoNodo *lista, char*palabra){
+	int posiciontipoNodo *pal_mod = lista;
+	int cont = 1;
 	
+	while(i < po){
+
+	 }
+}
+
+void guardar_lista_a_archivo(tipoNodo *lista, char *nombre_archivo){
+	FILE *archivo_bin = fopen(arc_binario, "wb");
+	FILE *archivo_txt = fopen("backup.txt", "wb");
+	char cadena[150];
+	tipoNodo *palabra = lista;
+	tipoDict *tmpInfo;
+	
+	while(palabra != NULL){
+		tmpInfo = palabra -> info;
+		fwrite(tmpInfo,sizeof(tipoDict),1,archivo_bin);
+		sprintf(cadena, "<%s>:<%s>\n", tmpInfo -> palIngles, tmpInfo -> palEspanol);
+		fputs(cadena,archivo_txt);
+	}
+}
 /*---------------------------------------------------------------------------------------*/
 int main (int argc, char * argv[]){
-	tipoNodo *lista=NULL;
+	tipoNodo *lista = NULL;
 	lista = cargarDictToLista ("palabras.bin", lista);
 		
 	printf("Ingrese la opcion que corresponda:\n\n");

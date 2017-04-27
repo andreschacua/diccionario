@@ -213,7 +213,7 @@ tipoNodo* eliminar_palabra(char* palabra, tipoNodo* lista){
 
 	return temporal;
 }
-/*---------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------------------*
 void guardar_lista_a_archivo(tipoNodo *lista, char *nombre_archivo){
 	FILE *archivo_bin = fopen(arc_binario, "wb");
 	FILE *archivo_txt = fopen("backup.txt", "wb");

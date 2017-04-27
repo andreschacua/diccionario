@@ -213,7 +213,7 @@ tipoNodo* eliminar_palabra(char* palabra, tipoNodo* lista){
 
 	return temporal;
 }
-/*---------------------------------------------------------------------------------------
+/*---------------------------------------------------------------------------------------*/
 void guardar_lista_a_archivo(tipoNodo *lista, char *nombre_archivo){
 	FILE *archivo_bin = fopen(arc_binario, "wb");
 	FILE *archivo_txt = fopen("backup.txt", "wb");
@@ -307,8 +307,9 @@ int main(){
     printf(" La forma de interaccion puede ser sin opciones o con opciones,\n");
     printf(" ingrese 1 se quiere ir a la forma sin opciones o ingrese 2 si quiere ir a la forma con opciones.\n");
     scanf("%d",&opcion);
-
+/*---------------------------------------------------------------------------------------
     if(opcion == 1){
+
         FILE * Diccionario = fopen("palabras.dict","r");
         char guardar[50];
         char palabra[50];
@@ -338,7 +339,7 @@ int main(){
         fclose(Diccionario);
 
     }
-
+/*---------------------------------------------------------------------------------------*/
     menu(lista);
 	return 0;
 }

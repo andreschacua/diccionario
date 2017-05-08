@@ -28,31 +28,6 @@ tipoNodo *crearNodo (tipoDict dict) {
 	return nodo;
 }
 /*---------------------------------------------------------------------------------------*/
-int buscar_posicion (char *palabra, tipoNodo *lista){
-	int posicion = 0;
-
-	if (lista == NULL){
-		printf("La lista no tiene ninguna palabra.\n");
-	}
-
-	else{
-		tipoNodo *aptNodo = lista;
-
-		while(aptNodo != NULL){
-			
-			if (strcmp(palabra, aptNodo -> info.palIngles) > 0){
-				posicion ++;
-				aptNodo = aptNodo -> siguiente;
-			}
-			else{
-				break;
-			}
-		}
-	}
-
-	return posicion;
-}
-/*---------------------------------------------------------------------------------------*/
 tipoNodo* adicionarLista (tipoDict dict, tipoNodo *lista) {
 	tipoNodo *nuevoNodo = crearNodo (dict);
 
@@ -68,14 +43,6 @@ tipoNodo* adicionarLista (tipoDict dict, tipoNodo *lista) {
 	return lista;
 }
 /*---------------------------------------------------------------------------------------*/
-void imprimirLista (tipoNodo *lista) {
-	tipoNodo *aptNodo = lista;
-	while (aptNodo != NULL) {
-		printf ("<%s>::<%s>\n", aptNodo->info.palIngles, aptNodo->info.palEspanol);
-		aptNodo = aptNodo->siguiente;
-	}
-}
-/*---------------------------------------------------------------------------------------*/
 tipoNodo* cargarDictToLista (char *nombreArchivoBin, tipoNodo *lista) {
 	FILE *manejadorBin;
 	manejadorBin = fopen (nombreArchivoBin, "r"); 
@@ -87,30 +54,6 @@ tipoNodo* cargarDictToLista (char *nombreArchivoBin, tipoNodo *lista) {
 	}
 	fclose (manejadorBin);
 	return lista;
-}
-/*---------------------------------------------------------------------------------------*/
-tipoNodo *insertarlista(tipoNodo *lista, int posicion, tipoDict elemento){
-    tipoNodo *temporal = crearNodo(elemento);
-    tipoNodo *palabra = lista;
-    int cont = 1;
-    
-    if(posicion == 1){
-            temporal->siguiente = lista;
-            lista = temporal;
-    }
-
-    else{
-        
-        while(cont < posicion-1){
-            cont++;
-            palabra = palabra->siguiente;
-        }
-
-    	temporal->siguiente = palabra->siguiente;
-    	palabra->siguiente = temporal;
-    }
-
- 	return lista;
 }
 /*---------------------------------------------------------------------------------------*/
 char busqueda_palabra(tipoNodo *lista, char *pal_buscar){
@@ -145,26 +88,60 @@ char busqueda_palabra(tipoNodo *lista, char *pal_buscar){
 	}
 }
 /*---------------------------------------------------------------------------------------*/
-tipoNodo* adicionar_palabra(tipoNodo*lista, char *pal_esp, char *pal_ing){
-	tipoDict nueva_pal;
-	tipoNodo *palabra;
-	int cont;
+int buscar_posicion (char *palabra, tipoNodo *lista){
+	int posicion = 0;
 
-	strcpy(nueva_pal.palIngles, pal_ing);
-	strcpy(nueva_pal.palEspanol, pal_esp);
+	if (lista == NULL){
+		printf("La lista no tiene ninguna palabra.\n");
+	}
 
-	palabra = crearNodo(nueva_pal);
-	cont = buscar_posicion(pal_ing, lista);
-	tipoNodo* igual = insertarlista(lista, cont, nueva_pal);
+	tipoNodo *aptNodo = lista;
+
+	while(aptNodo != NULL){
+			
+		if (strcmp(palabra, aptNodo -> info.palIngles) > 0){
+			posicion ++;
+			aptNodo = aptNodo -> siguiente;
+		}
+		
+		else{
+			break;
+		}
 	
-	return igual;
+	}
+
+	return posicion;
+}
+/*---------------------------------------------------------------------------------------*/
+tipoNodo *insertarlista(tipoNodo *lista, int posicion, tipoDict elemento){
+    tipoNodo *temporal = crearNodo(elemento);
+    tipoNodo *palabra = lista;
+    int cont = 1;
+    
+    if(posicion == 1){
+            temporal->siguiente = lista;
+            lista = temporal;
+    }
+
+    else{
+        
+        while(cont < posicion-1){
+            cont++;
+            palabra = palabra->siguiente;
+        }
+
+    	temporal->siguiente = palabra->siguiente;
+    	palabra->siguiente = temporal;
+    }
+
+ 	return lista;
 }
 /*---------------------------------------------------------------------------------------*/
 tipoNodo *modificar_palabra(tipoNodo *lista, char *palabra){
 	int posicion = buscar_posicion(palabra,lista);
 	tipoNodo *p_nodo = lista;
 	int cont = 1;
-	char nueva_trad[100];
+	char nueva_trad[50];
     
     printf("Inserte el nuevo significado de la palabra:\n");
     scanf("%s",nueva_trad);
@@ -184,6 +161,21 @@ tipoNodo *modificar_palabra(tipoNodo *lista, char *palabra){
     }
 
 	return lista;
+}
+/*---------------------------------------------------------------------------------------*/
+tipoNodo* adicionar_palabra(tipoNodo*lista, char *pal_esp, char *pal_ing){
+	tipoDict nueva_pal;
+	tipoNodo *palabra;
+	int cont;
+
+	strcpy(nueva_pal.palIngles, pal_ing);
+	strcpy(nueva_pal.palEspanol, pal_esp);
+
+	palabra = crearNodo(nueva_pal);
+	cont = buscar_posicion(pal_ing, lista);
+	tipoNodo* igual = insertarlista(lista, cont, nueva_pal);
+	
+	return igual;
 }
 /*---------------------------------------------------------------------------------------*/
 tipoNodo* eliminar_palabra(char* palabra, tipoNodo* lista){
@@ -213,20 +205,28 @@ tipoNodo* eliminar_palabra(char* palabra, tipoNodo* lista){
 
 	return temporal;
 }
-/*---------------------------------------------------------------------------------------*
+/*---------------------------------------------------------------------------------------*/
+void imprimirLista (tipoNodo *lista) {
+	tipoNodo *aptNodo = lista;
+	while (aptNodo != NULL) {
+		printf ("<%s>::<%s>\n", aptNodo->info.palIngles, aptNodo->info.palEspanol);
+		aptNodo = aptNodo->siguiente;
+	}
+}
+/*---------------------------------------------------------------------------------------*/
 void guardar_lista_a_archivo(tipoNodo *lista, char *nombre_archivo){
-	FILE *archivo_bin = fopen(arc_binario, "wb");
+	FILE *archivo_bin = fopen("arc_binario.bin", "wb");
 	FILE *archivo_txt = fopen("backup.txt", "wb");
 	char cadena[150];
 	tipoNodo *palabra = lista;
 	tipoDict *tmpInfo;
 	
 	while(palabra != NULL){
-		tmpInfo = palabra -> info;
+		tmpInfo = &(palabra->info);
 		fwrite(tmpInfo,sizeof(tipoDict),1,archivo_bin);
-		sprintf(cadena, "<%s>:<%s>\n", tmpInfo -> palIngles, tmpInfo -> palEspanol);
+		sprintf(cadena, "<%s>:<%s>\n", tmpInfo->palIngles, tmpInfo->palEspanol);
 		fputs(cadena,archivo_txt);
-		palabra = palabra -> siguiente;
+		palabra = palabra->siguiente;
 	}
 	fclose(archivo_txt);
 	fclose(archivo_bin);
@@ -299,47 +299,14 @@ int main(){
     tipoNodo *lista;
 	tipoDict dict;
 
-	lista = crearNodo(dict);
+	lista = NULL;
 	lista = cargarDictToLista ("palabras.bin", lista);
-    int opcion;
+    
 
     printf(" Diccionario por Andres Fernando Chacua Villota \n");
     printf(" La forma de interaccion puede ser sin opciones o con opciones,\n");
     printf(" ingrese 1 se quiere ir a la forma sin opciones o ingrese 2 si quiere ir a la forma con opciones.\n");
-    scanf("%d",&opcion);
-/*---------------------------------------------------------------------------------------
-    if(opcion == 1){
-
-        FILE * Diccionario = fopen("palabras.dict","r");
-        char guardar[50];
-        char palabra[50];
-        printf("Digite la palabra que desea buscar: ");
-        gets(palabra);
-        
-        if(Diccionario==NULL){
-            printf("No se pudo leer la palabra.");
-            exit(0);
-        }
-
-        else{
-            
-            while(!feof(Diccionario)){
-            	fgets(guardar, 50, Diccionario);
-                char *a;
-                a = strstr(guardar, palabra);
-                
-                if (strstr(guardar, palabra) != NULL){
-                    strtok(a, " : ");
-                    strtok(NULL, " ");
-                    printf("%s\n", a);
-                }
-            }
-        }
-        
-        fclose(Diccionario);
-
-    }
-/*---------------------------------------------------------------------------------------*/
+    //scanf("%d",&opcion);
     menu(lista);
 	return 0;
 }
